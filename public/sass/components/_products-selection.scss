@@ -1,0 +1,61 @@
+.products-selection {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+
+    margin: 0 $outer-margin;
+    padding: 45px 0;
+
+    &-bg-color {
+        background-color: $accent-background-color;
+    }
+
+    form {
+        display: flex;
+        flex-direction: row;
+
+        width: 70%;
+
+        div {
+            font-size: 18px;
+            line-height: 58px;
+
+            input[type="checkbox"] {
+                margin-right: 18px;
+            }
+
+            label {
+                margin-right: 40px;
+
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    button {
+        align-self: flex-end;
+
+        padding: 20px 35px;
+
+        text-transform: uppercase;
+
+        color: $background-color;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        background-color: $accent-color;
+
+        font-size: 14px;
+
+        &:hover {
+            outline: none;
+            border-color: $accent-color;
+            background-color: $background-color;
+            color: $accent-color;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}

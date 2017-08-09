@@ -8,12 +8,12 @@ const path = require('path');
 module.exports = {
     entry: [
         'babel-polyfill',
-        './src/index.js',
+        './src/index.jsx',
     ],
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
-        publicPath: '/',
+        publicPath: './build/',
     },
     module: {
         rules: [
@@ -23,11 +23,19 @@ module.exports = {
                 loader: 'babel-loader',
             },
             {
-                test: /\.css$/,
+                test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: ['css-loader', 'sass-loader'],
                 }),
+            },
+            {
+                test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+                use: 'url-loader?limit=10000&mimetype=application/font-woff&name=[name].[ext]',
+            },
+            {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                use: 'url-loader?limit=10000&mimetype=application/octet-stream&name=[name].[ext]',
             },
         ],
     },
@@ -54,9 +62,9 @@ module.exports = {
             path.join(__dirname, 'node_modules'),
         ],
         alias: {
-            '~': path.resolve(__dirname, 'src', 'app'),
+            app: path.resolve(__dirname, 'src', 'app'),
             style: path.resolve(__dirname, 'public', 'sass'),
         },
-        extensions: ['.js'],
+        extensions: ['.js', '.jsx'],
     },
 };
