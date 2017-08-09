@@ -12,3 +12,8 @@ $desktop-width: 1024px;
     @content;
   }
 }
+
+@mixin flex-row {
+    display: flex;
+    flex-direction: row;
+}

@@ -13,7 +13,6 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
-        publicPath: './build/',
     },
     module: {
         rules: [
@@ -45,7 +44,7 @@ module.exports = {
             host: 'localhost',
             port: 3000,
             server: {
-                baseDir: ['./', './dist'],
+                baseDir: ['./', './build'],
             },
         }),
         new ExtractTextPlugin('style.css'),
@@ -57,9 +56,9 @@ module.exports = {
     ],
     resolve: {
         modules: [
-            path.join(__dirname, 'src'),
-            path.join(__dirname, 'public'),
-            path.join(__dirname, 'node_modules'),
+            path.resolve(__dirname, 'src'),
+            path.resolve(__dirname, 'public'),
+            path.resolve(__dirname, 'node_modules'),
         ],
         alias: {
             app: path.resolve(__dirname, 'src', 'app'),
