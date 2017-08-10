@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Dropdown from './dropdown';
 
-export default function Product({ name, price, description, colors, sizes, imageLink }) {
+export default function Product({ name, price, description, colors, sizes, imageURL }) {
+    // <span className="product-description">{description}</span>
     return (
         <section className="product">
             <header className="product-header">
-                <span className="description">{description}</span>
+                <Dropdown items={['m', 'l', 's']} cb={() => 1} defaultHeader={'size'} />
+
             </header>
             <p>
-                <img src={imageLink} alt="product" />
+                <img src={imageURL} alt="product" />
             </p>
             <footer>
                 <span className="product-name">{name}</span>
@@ -21,14 +24,14 @@ export default function Product({ name, price, description, colors, sizes, image
 Product.propTypes = {
     name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    color: PropTypes.arrayOf(PropTypes.string).isRequired,
+    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     sizes: PropTypes.arrayOf(PropTypes.string).isRequired,
     description: PropTypes.string,
-    imageLink: PropTypes.string,
+    imageURL: PropTypes.string,
 };
 
 Product.defaultProps = {
-    imageLink: 'https://dummyimage.com/175x215.png?text=placeholder',
+    imageURL: 'https://dummyimage.com/175x215.png?text=placeholder',
     name: 't-shirt',
     price: '5',
     description: 'product',

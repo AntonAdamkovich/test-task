@@ -1,0 +1,20 @@
+.products-sorting {
+    @include flex-row;
+    justify-content: flex-start;
+
+    margin: 0 $outer-margin;
+
+    h2 {
+        margin: 30px 10px 0 0;
+
+        text-transform: uppercase;
+
+        color: $main-font-color;
+
+        font-size: 20px;
+    }
+
+    .dropdown-wrapper {
+        margin-top: 33px;
+    }
+}

@@ -4,11 +4,12 @@
         "./abstracts/variables",
         "./abstracts/mixins";
 
-@import "./layout/header",
-        "./layout/main-block";
+@import "./layout/main-block",
+        "./layout/header",
+        "./layout/navigation";
 
 @import "./components/products-selection",
-        "./components/products-sorting",
         "./components/products-type",
         "./components/product",
-        "./components/content";
+        "./components/content",
+        "./components/dropdown";

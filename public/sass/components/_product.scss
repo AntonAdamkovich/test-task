@@ -31,4 +31,12 @@
             content: "€";
         }
     }
+
+    &-name {
+        color: $accent-color;
+    }
+
+    &-description {
+        width: 50%;
+    }
 }

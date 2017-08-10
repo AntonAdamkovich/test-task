@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductsSelection from './products-selection';
-import ProductsSorting from './products-sorting';
+import Dropdown from './dropdown';
 
 export default class Navigation extends React.Component {
     handleCheck = (event) => {
@@ -8,10 +8,16 @@ export default class Navigation extends React.Component {
     }
 
     render() {
+        const list = ['price', 'name'];
+        const func = () => {};
+
         return (
             <div className="navigation">
                 <ProductsSelection />
-                <ProductsSorting />
+                <div className="products-sorting">
+                    <h2>sort by</h2>
+                    <Dropdown items={list} cb={func} />
+                </div>
             </div>
         );
     }
