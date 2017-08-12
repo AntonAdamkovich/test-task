@@ -1,10 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ProductsSelection from './products-selection';
 import Dropdown from './dropdown';
 
-export default class Navigation extends React.Component {
+class Navigation extends React.Component {
     handleCheck = (event) => {
-
+        if (event.target.checked === true) {
+            this.props.onAddType(event.target.value);
+        } else {
+            this.props.onRemoveType(event.target.value);
+        }
     }
 
     render() {
@@ -13,7 +18,7 @@ export default class Navigation extends React.Component {
 
         return (
             <div className="navigation">
-                <ProductsSelection />
+                <ProductsSelection handleCheck={this.handleCheck} />
                 <div className="products-sorting">
                     <h2>sort by</h2>
                     <Dropdown items={list} cb={func} />
@@ -22,3 +27,26 @@ export default class Navigation extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state, ownProps) => ({
+
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        onAddType: (typeName) => {
+            dispatch({
+                type: 'ADD_TYPE',
+                payload: typeName,
+            });
+        },
+        onRemoveType: (typeName) => {
+            dispatch({
+                type: 'REMOVE_TYPE',
+                payload: typeName,
+            });
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation);

@@ -8,7 +8,6 @@ export default function Product({ name, price, description, colors, sizes, image
         <section className="product">
             <header className="product-header">
                 <Dropdown items={['m', 'l', 's']} cb={() => 1} defaultHeader={'size'} />
-
             </header>
             <p>
                 <img src={imageURL} alt="product" />
