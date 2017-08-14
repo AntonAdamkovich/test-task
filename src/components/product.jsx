@@ -26,7 +26,7 @@ Product.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     sizes: PropTypes.arrayOf(PropTypes.string).isRequired,
     description: PropTypes.string,
-    imageURL: PropTypes.string,
+    imageURL: PropTypes.string.isRequired,
 };
 
 Product.defaultProps = {

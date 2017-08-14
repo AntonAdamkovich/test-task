@@ -5,20 +5,22 @@ import PropTypes from 'prop-types';
 import ProductsType from './products-type';
 
 function Content({ types }) {
-    let products;
     return (
         <div className="content">
-            {types.map((type) => {
-                // products = this.props.products.filter(item => item.type === type);
-                return <ProductsType products={products} type={type} key={type} />;
-            })}
+            {types.map(type => (
+                <ProductsType
+                    name={type.name}
+                    products={type.products}
+                    visible={type.visible}
+                    key={type.name}
+                />
+            ))}
         </div>
     );
 }
 
 Content.propTypes = {
-    types: PropTypes.arrayOf(PropTypes.string).isRequired,
-    products: PropTypes.arrayOf(PropTypes.object).isRequired,
+    types: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 const mapStateToProps = state => ({

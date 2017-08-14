@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Product from './product';
 
-export default function ProductsType({ type, products = [] }) {
+export default function ProductsType({ name, products = [], visible }) {
     return (
-        <div className="products-type">
+        <div className={`products-type ${visible ? '' : 'hidden'}`}>
             <header>
-                <h2>{type}</h2>
+                <h2>{name}</h2>
                 <div />
             </header>
             <div className="products-type-controls">
@@ -22,13 +22,13 @@ export default function ProductsType({ type, products = [] }) {
             </div>
             <ul>
                 {products.map(item => (
-                    <li>
+                    <li key={item.name}>
                         <Product
                             price={item.price}
                             name={item.name}
                             colors={item.colors}
                             sizes={item.sizes}
-                            key={item.name}
+                            imageURL={item.imageURL}
                         />
                     </li>
                 ))}
@@ -38,6 +38,7 @@ export default function ProductsType({ type, products = [] }) {
 }
 
 ProductsType.propTypes = {
-    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     products: PropTypes.arrayOf(PropTypes.object).isRequired,
+    visible: PropTypes.bool.isRequired,
 };

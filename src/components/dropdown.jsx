@@ -20,7 +20,7 @@ export default class Dropdown extends React.Component {
     }
     handleClick = (event) => {
         const newHeader = event.target.innerHTML;
-        this.props.cb();
+        this.props.cb(newHeader);
         this.setState(() => ({ header: newHeader }));
     }
 

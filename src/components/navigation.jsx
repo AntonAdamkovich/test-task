@@ -1,27 +1,40 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ProductsSelection from './products-selection';
 import Dropdown from './dropdown';
 
 class Navigation extends React.Component {
+    static propTypes = {
+        onToggleType: PropTypes.func.isRequired,
+        types: PropTypes.arrayOf(PropTypes.object).isRequired,
+        onSortChange: PropTypes.func.isRequired,
+    }
+
+    componentDidMount() {
+        this.handleSortChange('price');
+    }
+
+    handleSortChange = (sortingValue) => {
+        this.props.onSortChange(sortingValue);
+    }
+
     handleCheck = (event) => {
-        if (event.target.checked === true) {
-            this.props.onAddType(event.target.value);
-        } else {
-            this.props.onRemoveType(event.target.value);
-        }
+        this.props.onToggleType(event.target.value);
     }
 
     render() {
         const list = ['price', 'name'];
-        const func = () => {};
 
         return (
             <div className="navigation">
-                <ProductsSelection handleCheck={this.handleCheck} />
+                <ProductsSelection
+                    productTypes={this.props.types}
+                    handleCheck={this.handleCheck}
+                />
                 <div className="products-sorting">
                     <h2>sort by</h2>
-                    <Dropdown items={list} cb={func} />
+                    <Dropdown items={list} cb={this.handleSortChange} />
                 </div>
             </div>
         );
@@ -29,21 +42,21 @@ class Navigation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-
+    types: state,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onAddType: (typeName) => {
+        onToggleType: (typeName) => {
             dispatch({
-                type: 'ADD_TYPE',
+                type: 'TOGGLE_TYPE',
                 payload: typeName,
             });
         },
-        onRemoveType: (typeName) => {
+        onSortChange: (sortingValue) => {
             dispatch({
-                type: 'REMOVE_TYPE',
-                payload: typeName,
+                type: 'SORT_PRODUCTS',
+                payload: sortingValue,
             });
         },
     };
