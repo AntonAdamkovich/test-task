@@ -42,7 +42,7 @@ class Navigation extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    types: state,
+    types: state.productType,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => {

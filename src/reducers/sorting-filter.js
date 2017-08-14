@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default function sortingFilter(state, action) {
     switch (action.type) {
     case 'SORT_PRODUCTS': {

@@ -39,6 +39,14 @@
         padding: 0;
 
         list-style: none;
+
+        li {
+            a {
+                text-decoration: none;
+                text-transform: uppercase;
+                color: $main-font-color;
+            }
+        }
     }
 
     &-controls {

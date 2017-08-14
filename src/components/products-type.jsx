@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Product from './product';
 
 export default function ProductsType({ name, products = [], visible }) {
@@ -23,13 +24,15 @@ export default function ProductsType({ name, products = [], visible }) {
             <ul>
                 {products.map(item => (
                     <li key={item.name}>
-                        <Product
-                            price={item.price}
-                            name={item.name}
-                            colors={item.colors}
-                            sizes={item.sizes}
-                            imageURL={item.imageURL}
-                        />
+                        <Link to={`/details/${name}/${item.name}`}>
+                            <Product
+                                price={item.price}
+                                name={item.name}
+                                colors={item.colors}
+                                sizes={item.sizes}
+                                imageURL={item.imageURL}
+                            />
+                        </Link>
                     </li>
                 ))}
             </ul>

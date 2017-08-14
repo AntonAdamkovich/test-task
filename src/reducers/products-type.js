@@ -1,8 +1,8 @@
 import initialState from '../example-data';
 import sortingFilter from './sorting-filter';
-import typeReducer from './type-reducer';
+// import typeReducer from './type-reducer';
 
-export default function productTypesReducer(state = initialState, action) {
+export default function productTypes(state = initialState, action) {
     switch (action.type) {
     case 'TOGGLE_TYPE':
         return state.map((item) => {

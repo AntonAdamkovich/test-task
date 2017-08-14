@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dropdown from './dropdown';
 
-export default function Product({ name, price, description, colors, sizes, imageURL }) {
+export default function Product({ name, price, description, colors, sizes, imageURL, fullScreen }) {
     // <span className="product-description">{description}</span>
     return (
-        <section className="product">
+        <section className={`product${fullScreen ? ' product-big' : ' product-small'}`}>
             <header className="product-header">
                 <Dropdown items={['m', 'l', 's']} cb={() => 1} defaultHeader={'size'} />
             </header>
@@ -26,6 +26,7 @@ Product.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     sizes: PropTypes.arrayOf(PropTypes.string).isRequired,
     description: PropTypes.string,
+    fullScreen: PropTypes.bool,
     imageURL: PropTypes.string.isRequired,
 };
 
@@ -36,4 +37,5 @@ Product.defaultProps = {
     description: 'product',
     colors: ['red', 'white'],
     sizes: ['l', 'm'],
+    fullScreen: false,
 };

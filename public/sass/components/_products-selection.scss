@@ -11,6 +11,24 @@
         background-color: $accent-background-color;
     }
 
+    a {
+        text-decoration: none;
+        text-transform: uppercase;
+        color: $main-font-color;
+
+        &:hover {
+            opacity: 0.5;
+            &::before {
+                opacity: 0.5;
+            }
+        }
+
+        &::before {
+            content: "<";
+            margin-right: 30px;
+        }
+    }
+
     form {
         @include flex-row;
 

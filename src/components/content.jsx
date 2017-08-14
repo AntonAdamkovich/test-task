@@ -23,23 +23,14 @@ Content.propTypes = {
     types: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-const mapStateToProps = state => ({
-    types: state,
-});
+const mapStateToProps = (state) => {
+    return {
+        types: state.productType,
+    };
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    // onAddType: (typeName) => {
-    //     dispatch({
-    //         type: 'ADD_TYPE',
-    //         payload: typeName,
-    //     });
-    // },
-    // onRemoveType: (typeName) => {
-    //     dispatch({
-    //         type: 'REMOVE_TYPE',
-    //         payload: typeName,
-    //     });
-    // },
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Content);
