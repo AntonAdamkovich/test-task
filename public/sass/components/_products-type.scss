@@ -34,17 +34,15 @@
 
     > ul {
         @include flex-row;
-        justify-content: space-between;
+        justify-content: center;
 
         padding: 0;
 
         list-style: none;
 
-        @include small-devices {
-            justify-content: center;
-        }
 
         li {
+            margin: 0 10px;
             a {
                 text-decoration: none;
                 text-transform: uppercase;

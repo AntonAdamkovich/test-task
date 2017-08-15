@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Product from './product';
 
-export default function ProductsType({ name, products, visible, clickHandler }) {
+export default function ProductsType({ name, products, visible, clickHandler, currentPage, totalPages}) {
     return (
         <div className={`products-type ${visible ? '' : 'hidden'}`}>
             <header>
@@ -12,9 +12,9 @@ export default function ProductsType({ name, products, visible, clickHandler }) 
             </header>
             <div className="products-type-controls">
                 <p>
-                    <span className="current-page">{0}</span>
+                    <span className="current-page">{currentPage}</span>
                     /
-                    <span className="total-pages">{0}</span>
+                    <span className="total-pages">{totalPages}</span>
                 </p>
                 <p onClick={clickHandler}>
                     <a href="#" className="previous-page">&lt;</a>
