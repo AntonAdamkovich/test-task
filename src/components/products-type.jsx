@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Product from './product';
 
-export default function ProductsType({ name, products = [], visible }) {
+export default function ProductsType({ name, products, visible, clickHandler }) {
     return (
         <div className={`products-type ${visible ? '' : 'hidden'}`}>
             <header>
@@ -12,29 +12,30 @@ export default function ProductsType({ name, products = [], visible }) {
             </header>
             <div className="products-type-controls">
                 <p>
-                    <span className="current-page">1</span>
+                    <span className="current-page">{0}</span>
                     /
-                    <span className="total-pages">5</span>
+                    <span className="total-pages">{0}</span>
                 </p>
-                <p>
+                <p onClick={clickHandler}>
                     <a href="#" className="previous-page">&lt;</a>
                     <a href="#" className="next-page">&gt;</a>
                 </p>
             </div>
             <ul>
-                {products.map(item => (
-                    <li key={item.name}>
-                        <Link to={`/details/${name}/${item.name}`}>
-                            <Product
-                                price={item.price}
-                                name={item.name}
-                                colors={item.colors}
-                                sizes={item.sizes}
-                                imageURL={item.imageURL}
-                            />
-                        </Link>
-                    </li>
-                ))}
+                {products.filter(item => item.visible === true)
+                    .map(item => (
+                        <li key={item.name}>
+                            <Link to={`/details/${name}/${item.name}`}>
+                                <Product
+                                    price={item.price}
+                                    name={item.name}
+                                    colors={item.colors}
+                                    sizes={item.sizes}
+                                    imageURL={item.imageURL}
+                                />
+                            </Link>
+                        </li>
+                    ))}
             </ul>
         </div>
     );
@@ -44,4 +45,6 @@ ProductsType.propTypes = {
     name: PropTypes.string.isRequired,
     products: PropTypes.arrayOf(PropTypes.object).isRequired,
     visible: PropTypes.bool.isRequired,
+    clickHandler: PropTypes.func.isRequired,
 };
+

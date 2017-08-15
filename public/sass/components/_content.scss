@@ -1,3 +1,6 @@
 .content {
     margin: 0 $outer-margin;
+    @include small-devices {
+        margin: 0 5px;
+    }
 }

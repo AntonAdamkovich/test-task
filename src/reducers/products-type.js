@@ -1,6 +1,6 @@
 import initialState from '../example-data';
 import sortingFilter from './sorting-filter';
-// import typeReducer from './type-reducer';
+import content from './content';
 
 export default function productTypes(state = initialState, action) {
     switch (action.type) {
@@ -15,6 +15,8 @@ export default function productTypes(state = initialState, action) {
 
             return item;
         });
+    case 'SLIDER_ACTION':
+        return state;
     case 'SORT_PRODUCTS':
         return state.map(item => sortingFilter(item, action));
     default:

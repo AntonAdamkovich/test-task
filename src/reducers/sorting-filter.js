@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default function sortingFilter(state, action) {
     switch (action.type) {
     case 'SORT_PRODUCTS': {
@@ -5,11 +7,11 @@ export default function sortingFilter(state, action) {
         return {
             ...state,
             products: currentState.sort((a, b) => {
-                switch (action.payload) {
-                case 'price':
-                    return a.price - b.price;
-                case 'name':
-                    return a.name.localeCompare(b.name);
+                switch (true) {
+                case _.isNumber(a[action.payload]):
+                    return a[action.payload] - b[action.payload];
+                case _.isString(a[action.payload]):
+                    return a[action.payload].localeCompare(b[action.payload]);
                 default:
                     return a.price - b.price;
                 }

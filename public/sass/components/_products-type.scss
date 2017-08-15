@@ -27,7 +27,7 @@
         > div {
             margin-top: 25px;
             height: 0;
-            width: 100%;
+            width: 90%;
             border: 1px solid $accent-color;
         }
     }
@@ -39,6 +39,10 @@
         padding: 0;
 
         list-style: none;
+
+        @include small-devices {
+            justify-content: center;
+        }
 
         li {
             a {
@@ -56,6 +60,14 @@
             color: $accent-color;
             text-align: right;
             letter-spacing: 2px;
+
+            @include small-devices {
+                text-align: center;
+            }
+
+            @include mobile {
+                text-align: center;
+            }
 
             a {
                 color: $accent-color;

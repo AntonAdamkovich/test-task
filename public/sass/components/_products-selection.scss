@@ -32,14 +32,24 @@
     form {
         @include flex-row;
 
-        width: 70%;
+        width: 65%;
 
+        @include small-devices {
+            display: none;
+        }
+
+        @include mobile {
+            display: none;
+        }
         div {
             font-size: 18px;
             line-height: 58px;
 
             input[type="checkbox"] {
                 margin-right: 18px;
+                @include small-devices {
+                    margin-right: 6px;
+                }
             }
 
             label {
@@ -47,6 +57,10 @@
                 margin-right: 40px;
 
                 text-transform: uppercase;
+
+                @include small-devices {
+                    margin-right: 15px;
+                }
             }
         }
     }
@@ -55,6 +69,17 @@
         align-self: flex-end;
 
         padding: 20px 35px;
+
+        @include small-devices {
+            padding: 20px 10px;
+            align-self: center;
+        }
+
+        @include mobile{
+            padding: 20px 10px;
+            align-self: center;
+        }
+
 
         text-transform: uppercase;
 

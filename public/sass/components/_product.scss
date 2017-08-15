@@ -1,12 +1,13 @@
 .product {
     padding: 30px 25px;
     background-color: $accent-background-color;
-    border: 6px solid $accent-background-color;
+
     border-radius: 3px;
 
     text-transform: uppercase;
 
     &-small {
+        border: 6px solid $accent-background-color;
         width: 258px;
         p {
             img {
@@ -15,8 +16,19 @@
         }
     }
 
-    &-big {
-        width: 100%;
+    &-details {
+        @include  flex_row;
+        border: 6px solid $accent-color;
+        p {
+            flex: 3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        span {
+            margin: 10px;
+        }
     }
 
     &:hover {

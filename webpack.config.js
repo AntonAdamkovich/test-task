@@ -13,6 +13,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
+        publicPath: '/',
     },
     module: {
         rules: [
@@ -63,7 +64,8 @@ module.exports = {
         alias: {
             app: path.resolve(__dirname, 'src', 'app'),
             style: path.resolve(__dirname, 'public', 'sass'),
+            images: path.resolve(__dirname, 'public', 'images'),
         },
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.jpg'],
     },
 };
