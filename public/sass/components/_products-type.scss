@@ -9,6 +9,13 @@
         .products-type-controls {
             > p {
                 text-align: left;
+                @include small-devices {
+                    text-align: center;
+                }
+
+                @include mobile {
+                    text-align: center;
+                }
             }
         }
     }

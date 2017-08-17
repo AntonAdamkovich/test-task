@@ -1,49 +1,38 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import ProductsType from './products-type';
 
 class Content extends React.Component {
     static propTypes = {
         types: PropTypes.arrayOf(PropTypes.object).isRequired,
+        onMount: PropTypes.func.isRequired,
+        onNextClick: PropTypes.func.isRequired,
+        onPreviousClick: PropTypes.func.isRequired,
+        onContainerIncrease: PropTypes.func.isRequired,
+        onContainerDecrease: PropTypes.func.isRequired,
     };
 
-    state = {
-        containerWidth: 0,
-        itemWidth: 0,
-
-        totalItemsCount: 0,
-        itemsPerPage: 0,
-        currentPage: 0,
-        startItemIndex: 0,
-        lastItemIndex: 0,
-        pagesCount: 0,
-    }
-
     componentDidMount() {
+        window.addEventListener('resize', this.handleResize);
+
         const containerWidth = this.getContainerWidth();
         const itemWidth = this.getItemWidth();
         const itemsPerPage = this.visibleItemsCount(containerWidth, itemWidth);
         const currentPage = 0;
         const startItemIndex = currentPage * itemsPerPage;
         const lastItemIndex = startItemIndex + itemsPerPage;
-        const totalItemsCount = this.props.types[0].products.length;
-        const pagesCount = _.ceil(totalItemsCount / itemsPerPage);
 
-        this.setState(() => ({
+        this.contentWidth = (itemWidth * itemsPerPage) + (this.getHorizontalMargins() * itemsPerPage);
+
+        this.props.onMount(
             containerWidth,
             itemWidth,
-
             itemsPerPage,
             currentPage,
             startItemIndex,
             lastItemIndex,
-            totalItemsCount,
-            pagesCount,
-        }));
-
-        window.addEventListener('resize', this.handleResize);
+        );
     }
 
     componentWillUnmount() {
@@ -57,7 +46,7 @@ class Content extends React.Component {
      * @memberof Content
      */
     getContainerWidth() {
-        const containerWidth = parseFloat(
+        const containerWidth = parseInt(
             getComputedStyle(this.container).width,
         );
 
@@ -91,17 +80,22 @@ class Content extends React.Component {
             getComputedStyle(this.container.children[0].querySelectorAll('ul li')[0])['margin-right'],
         );
 
-        return {
-            marginLeft,
-            marginRight,
-        };
+        return marginLeft + marginRight;
     }
 
+    /**
+     * calculate count of visible items of slider
+     *
+     * @param {number} containerWidth
+     * @param {number} itemWidth
+     * @returns {number} - number of visible items
+     * @memberof Content
+     */
     visibleItemsCount(containerWidth, itemWidth) {
-        const horizontalMargins = this.getHorizontalMargins();
-        const gapAroundItem = (horizontalMargins.marginLeft + horizontalMargins.marginRight) || (itemWidth * 0.01);
-        let itemsCount = _.floor(containerWidth / (itemWidth + gapAroundItem));
-        if (itemsCount < 1) {
+        const currentMarginsSum = this.getHorizontalMargins();
+        const gapAroundItem = currentMarginsSum || (itemWidth * 0.01);
+        let itemsCount = Math.floor(containerWidth / (itemWidth + gapAroundItem));
+        if (itemsCount === 0) {
             itemsCount = 1;
         }
 
@@ -113,64 +107,19 @@ class Content extends React.Component {
      *
      * @memberof Content
      */
-    handleResize = (event) => {
-        const currentContainerSize = this.getContainerWidth();
-        const currentItemsCount = this.visibleItemsCount(
-            currentContainerSize,
-            this.state.itemWidth,
-        );
-        let counter = Math.abs(currentItemsCount - this.state.itemsPerPage);
-
-        // hide excess elements
-        if (this.state.containerWidth < currentContainerSize && counter > 0) {
-            let startItemIndex = this.state.startItemIndex;
-            let lastItemIndex = this.state.lastItemIndex;
-
-            while (counter > 0) {
-                if (startItemIndex > 0) {
-                    startItemIndex += 1;
-                } else {
-                    lastItemIndex += 1;
-                }
-
-                counter -= 1;
+    handleResize = () => {
+        clearTimeout(this.resizeTimer);
+        this.resizeTimer = setTimeout(() => {
+            const currentContainerWidth = this.getContainerWidth();
+            const itemWidth = this.getItemWidth();
+            if (this.contentWidth > currentContainerWidth) {
+                this.contentWidth = currentContainerWidth;
+                this.props.onContainerDecrease(currentContainerWidth, 1);
+            } else if ((this.contentWidth + itemWidth) <= currentContainerWidth) {
+                this.contentWidth = currentContainerWidth;
+                this.props.onContainerIncrease(currentContainerWidth, 1);
             }
-
-            const currentPage = _.ceil(startItemIndex / currentItemsCount);
-
-            this.setState(() => ({
-                containerWidth: currentContainerSize,
-                itemsPerPage: currentItemsCount,
-                startItemIndex,
-                lastItemIndex,
-                currentPage,
-            }));
-
-            // show more elements
-        } else if (this.state.containerWidth > currentContainerSize && counter > 0) {
-            let startItemIndex = this.state.startItemIndex;
-            let lastItemIndex = this.state.lastItemIndex;
-
-            while (counter > 0) {
-                if (startItemIndex > 0) {
-                    startItemIndex += 1;
-                } else {
-                    lastItemIndex -= 1;
-                }
-
-                counter -= 1;
-            }
-
-            const currentPage = _.ceil(startItemIndex / currentItemsCount);
-
-            this.setState(() => ({
-                containerWidth: currentContainerSize,
-                itemsPerPage: currentItemsCount,
-                startItemIndex,
-                lastItemIndex,
-                currentPage,
-            }));
-        }
+        }, 250);
     }
 
     /**
@@ -180,57 +129,29 @@ class Content extends React.Component {
      */
     handleControlsClick = (event) => {
         event.preventDefault();
-        let currentPage;
-        let newStartItemIndex;
-        let newLastItemIndex;
+        const target = event.currentTarget.dataset.name;
 
         if (event.target.matches('.previous-page')) {
-            currentPage = this.state.currentPage - 1;
-            newLastItemIndex = this.state.startItemIndex;
-            newStartItemIndex = newLastItemIndex - this.state.itemsPerPage;
-            if (newStartItemIndex < 0) {
-                newLastItemIndex = _.ceil(this.state.totalItemsCount / this.state.itemsPerPage) * this.state.itemsPerPage;
-                newStartItemIndex = newLastItemIndex - this.state.itemsPerPage;
-                currentPage = this.state.pagesCount;
-            }
-            console.log(newLastItemIndex, newStartItemIndex, currentPage);
-
-            this.setState(() => ({
-                currentPage,
-                startItemIndex: newStartItemIndex,
-                lastItemIndex: newLastItemIndex,
-            }));
+            this.props.onPreviousClick(target);
         } else if (event.target.matches('.next-page')) {
-            currentPage = this.state.currentPage + 1;
-            newStartItemIndex = this.state.lastItemIndex;
-            newLastItemIndex = newStartItemIndex + this.state.itemsPerPage;
-            // this.props.onNextClick(target, startItemIndex, lastItemIndex, currentPage);
-            if (newStartItemIndex >= this.state.totalItemsCount) {
-                newStartItemIndex = 0;
-                newLastItemIndex = newStartItemIndex + this.state.itemsPerPage;
-                currentPage = 0;
-            }
-
-            this.setState(() => ({
-                currentPage,
-                startItemIndex: newStartItemIndex,
-                lastItemIndex: newLastItemIndex,
-            }));
+            this.props.onNextClick(target);
         }
     }
 
-    sortVisible(products = []) {
-        let visibleElementsCount = 0;
-        const result = products.map((item, index) => {
-            if (index < this.state.startItemIndex || index >= this.state.lastItemIndex) {
-                return _.set(item, 'visible', false);
-            }
-            visibleElementsCount += 1;
-            return _.set(item, 'visible', true);
+    /**
+     * return array of visible slider elements
+     *
+     * @param {object} type - element of content block with all data
+     * @returns {object[]}
+     * @memberof Content
+     */
+    getVisible(type) {
+        const result = type.products.filter((item, index) => {
+            return (index >= type.sliderState.startItemIndex && index < type.sliderState.lastItemIndex);
         });
 
-        if (visibleElementsCount < 1) {
-            result[0].visible = true;
+        if (result.length === 0) {
+            result.push(type.products[0]);
         }
         return result;
     }
@@ -244,11 +165,11 @@ class Content extends React.Component {
                 {this.props.types.map(type => (
                     <ProductsType
                         name={type.name}
-                        products={this.sortVisible(type.products)}
+                        products={this.getVisible(type)}
                         visible={type.visible}
                         clickHandler={this.handleControlsClick}
-                        currentPage={this.state.currentPage + 1}
-                        totalPages={this.state.pagesCount}
+                        currentPage={type.sliderState.currentPage + 1}
+                        totalPages={type.sliderState.pagesCount}
                         key={type.name}
                     />
                 ))}
@@ -257,39 +178,62 @@ class Content extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        types: state.productType,
-    };
-};
+const mapStateToProps = state => ({
+    types: state.productType,
+});
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        onMount: () => {
-            dispatch({
-                type: 'SLIDER_ACTION',
-                payload: 'INIT',
-            });
-        },
-        onResize: () => {
-            dispatch({
-                type: 'SLIDER_ACTION',
-                payload: 'RESIZE',
-            });
-        },
-        onNextClick: () => {
-            dispatch({
-                type: 'SLIDER_ACTION',
-                payload: 'NEXT',
-            });
-        },
-        onPreviousClick: () => {
-            dispatch({
-                type: 'SLIDER_ACTION',
-                payload: 'PREVIOUS',
-            });
-        },
-    };
-};
+const mapDispatchToProps = dispatch => ({
+    onMount: (
+        containerWidth,
+        itemWidth,
+        itemsPerPage,
+        currentPage,
+        startItemIndex,
+        lastItemIndex,
+    ) => {
+        dispatch({
+            type: 'INIT',
+            payload: {
+                containerWidth,
+                itemWidth,
+                itemsPerPage,
+                currentPage,
+                startItemIndex,
+                lastItemIndex,
+
+            },
+        });
+    },
+    onContainerIncrease: (containerWidth, itemsDiff) => {
+        dispatch({
+            type: 'RESIZE',
+            payload: 'INCREASE',
+            itemsDiff,
+            containerWidth,
+        });
+    },
+    onContainerDecrease: (containerWidth, itemsDiff) => {
+        dispatch({
+            type: 'RESIZE',
+            payload: 'DECREASE',
+            itemsDiff,
+            containerWidth,
+        });
+    },
+    onNextClick: (target) => {
+        dispatch({
+            type: 'SLIDER_CLICK',
+            payload: 'NEXT',
+            target,
+        });
+    },
+    onPreviousClick: (target) => {
+        dispatch({
+            type: 'SLIDER_CLICK',
+            payload: 'PREVIOUS',
+            target,
+        });
+    },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Content);
